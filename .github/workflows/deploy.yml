@@ -17,6 +17,7 @@ jobs:
   #         password: ${{ secrets.FTP_PASS }}
 
   deploy-local:
+    runs-on: self-hosted
     needs: deploy-vps
     steps:
       - name: 📋 Verificar estado previo
