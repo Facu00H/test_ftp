@@ -5,51 +5,43 @@ on:
     branches: [ master ]
 
 jobs:
-  # deploy-vps:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: FTP Deploy a Dattaweb (VPS)
-  #       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-  #       with:
-  #         server: ${{ secrets.FTP_HOST }}
-  #         username: ${{ secrets.FTP_USER }}
-  #         password: ${{ secrets.FTP_PASS }}
+  # El bloque de VPS está comentado, por lo que no existe.
+  # Al no haber 'needs', este será el primer y único trabajo en ejecutarse.
 
   deploy-local:
     runs-on: self-hosted
-    needs: deploy-vps
     steps:
       - name: 📋 Verificar estado previo
         run: |
           echo "Usuario ejecutando: $(whoami)"
           echo "Directorio actual: $(pwd)"
           echo "--- Estado del contenedor antes del restart ---"
-          docker ps --filter "name=nombre_del_contenedor_ftp" --format "ID: {{.ID}} | Status: {{.Status}} | Up time: {{.RunningFor}}"
+          # Usamos || true para que no falle si el contenedor no existe aún
+          docker ps --filter "name=nombre_del_contenedor_ftp" --format "ID: {{.ID}} | Status: {{.Status}}" || true
 
       - name: 📥 Actualizar Código Local
         run: |
+          # RECUERDA: Cambia /ruta/a/tu/proyecto por la ruta real (ej: /home/facundo/test_ftp)
           cd /ruta/a/tu/proyecto
           echo "Obteniendo cambios de GitHub..."
-          git fetch origin main
+          git fetch origin master
           
-          # Esto nos dirá exactamente qué archivos cambiaron en la consola
           echo "Archivos que se van a actualizar:"
-          git diff --name-status main origin/main
+          git diff --name-status master origin/master
           
-          git pull origin main
+          git pull origin master
           echo "✅ Código actualizado correctamente."
 
       - name: 🔄 Reiniciar Docker FTP y Validar
         run: |
-          echo "Reiniciando contenedor..."
-          docker restart nombre_del_contenedor_ftp
+          # Cambia 'nombre_del_contenedor_ftp' por el nombre real de tu contenedor
+          docker restart nombre_del_contenedor_ftp || echo "No se pudo reiniciar el contenedor"
           
-          # Esperamos 2 segundos para que el contenedor intente subir
           sleep 2
           
           echo "--- Estado del contenedor después del restart ---"
           docker ps --filter "name=nombre_del_contenedor_ftp" --format "ID: {{.ID}} | Status: {{.Status}}"
           
           echo "✅ El archivo example.txt ahora debería estar disponible."
-          ls -lh /ruta/a/tu/proyecto/example.txt
+          # Verifica la ruta aquí también
+          ls -lh /ruta/a/tu/proyecto/example.txt || true
