@@ -18,7 +18,6 @@ jobs:
 
 deploy-local:
     needs: deploy-vps
-    runs-on: self-hosted
     steps:
       - name: 📋 Verificar estado previo
         run: |
