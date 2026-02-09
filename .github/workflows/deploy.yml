@@ -16,7 +16,7 @@ jobs:
   #         username: ${{ secrets.FTP_USER }}
   #         password: ${{ secrets.FTP_PASS }}
 
-deploy-local:
+  deploy-local:
     needs: deploy-vps
     steps:
       - name: 📋 Verificar estado previo
