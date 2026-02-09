@@ -2,7 +2,7 @@ name: Deploy Multi-Entorno
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   # deploy-vps:
