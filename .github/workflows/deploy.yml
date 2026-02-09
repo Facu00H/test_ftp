@@ -22,7 +22,7 @@ jobs:
       - name: 📥 Actualizar Código Local
         run: |
           # RECUERDA: Cambia /ruta/a/tu/proyecto por la ruta real (ej: /home/facundo/test_ftp)
-          cd /ruta/a/tu/proyecto
+          cd /home/facundo/Proyects/test_ftp
           echo "Obteniendo cambios de GitHub..."
           git fetch origin master
           
@@ -44,4 +44,4 @@ jobs:
           
           echo "✅ El archivo example.txt ahora debería estar disponible."
           # Verifica la ruta aquí también
-          ls -lh /ruta/a/tu/proyecto/example.txt || true
+          ls -lh /home/facundo/Proyects/example.txt || true
